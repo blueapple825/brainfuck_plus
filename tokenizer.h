@@ -16,7 +16,8 @@ typedef enum _TokenType
     LOOP_START,
     LOOP_END,
     SET_POINTER,
-    NAME
+    NAME,
+    CALL
 }TokenType;
 
 typedef struct _Token Token;

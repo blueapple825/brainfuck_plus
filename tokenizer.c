@@ -163,6 +163,15 @@ TokenList* tokenize(const char* string)
 
             break;
         }
+        case '!':
+        {
+            Token* token = (Token*)malloc(sizeof(Token));
+            token->type = CALL;
+            addTokenToTokenList(tokenList, token);
+            string++;
+
+            break;
+        }
         default:
             string++;
             break;
