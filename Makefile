@@ -6,17 +6,31 @@ endif
 
 ifeq ($(UNAME), Windows_NT)
     TARGET := bfp.exe
+	TEST := test.exe
 	RM := del
 else
-    TARGET := exe
+    TARGET := bfp
+	TEST := test.out
 	RM := rm
 endif
 
-$(TARGET): bfp.o
-	gcc bfp.o -o $(TARGET)
+$(TARGET): bfp.o tokenizer.o
+	gcc bfp.o tokenizer.o -o $(TARGET)
 
 bfp.o: bfp.c
 	gcc bfp.c -c -o bfp.o
 
+tokenizer.o: tokenizer.c tokenizer.h
+	gcc tokenizer.c -c -o tokenizer.o
+
+$(TEST): test.o tokenizer.o
+	gcc test.o tokenizer.o -o $(TEST)
+
+test.o: test.c
+	gcc test.c -c -o test.o
+
+test: $(TEST)
+	$()
+
 clean:
-	$(RM) *.o $(TARGET)
+	$(RM) *.o $(TARGET) $(TEST)
