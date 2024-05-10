@@ -25,10 +25,10 @@ brainfuck with miscellaneous features added
 
 `]` - End of loop, move to the start of the loop (Not implemented)
 
-`*` - Change the pointer to the value currently pointed by the poi (Not implemented)nter
+`*` - Change the pointer to the value currently pointed by the pointer (Not implemented)
 
 `{name}[code]` - Declare subroutine (Not implemented)
 
 `!{name}` - Call subroutine (Not implemented)
 
-`name` - String composed of ```-=~!@#$%^&*()_+[]\{}|;:'",./<>?`` (Not implemented)
+`name` - String composed of ```-=~!@#$%^&*()_+[]\{}|;:'",./<>?`` (up to 32 characters, Not implemented)
