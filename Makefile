@@ -20,9 +20,6 @@ $(TARGET): bfp.o tokenizer.o
 bfp.o: bfp.c
 	gcc bfp.c -c -o bfp.o
 
-tokenizer.o: tokenizer.c tokenizer.h
-	gcc tokenizer.c -c -o tokenizer.o
-
 $(TEST): test.o tokenizer.o
 	gcc test.o tokenizer.o -o $(TEST)
 
@@ -31,6 +28,12 @@ test.o: test.c
 
 test: $(TEST)
 	$()
+
+tokenizer.o: tokenizer.c tokenizer.h
+	gcc tokenizer.c -c -o tokenizer.o
+
+ast.o: ast.c ast.h
+	gcc ast.c -c -o ast.o
 
 clean:
 	$(RM) *.o $(TARGET) $(TEST)
