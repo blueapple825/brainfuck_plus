@@ -50,10 +50,13 @@ TokenList* tokenize(const char* string)
                 value += (*string) == '>' ? 1 : -1;
             }
 
-            Token* token = (Token*)malloc(sizeof(Token));
-            token->type = ADD_POINTER;
-            token->valueNumber = value;
-            addTokenToTokenList(tokenList, token);
+            if(value != 0)
+            {
+                Token* token = (Token*)malloc(sizeof(Token));
+                token->type = ADD_POINTER;
+                token->valueNumber = value;
+                addTokenToTokenList(tokenList, token);
+            }
 
             break;
         }
@@ -66,10 +69,13 @@ TokenList* tokenize(const char* string)
                 value += (*string) == '+' ? 1 : -1;
             }
 
-            Token* token = (Token*)malloc(sizeof(Token));
-            token->type = ADD_VALUE;
-            token->valueNumber = value;
-            addTokenToTokenList(tokenList, token);
+            if(value != 0)
+            {
+                Token* token = (Token*)malloc(sizeof(Token));
+                token->type = ADD_VALUE;
+                token->valueNumber = value;
+                addTokenToTokenList(tokenList, token);
+            }
 
             break;
         }
