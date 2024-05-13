@@ -156,7 +156,7 @@ TokenList* tokenize(const char* string)
                     token->valueString[namePointer++] = *string;
                     if(namePointer >= 32)
                     {
-                        fprintf(stderr, "%s\n", "SyntaxError: The length of name exceeds 32 characters.");
+                        fprintf(stderr, "%s\n", "syntax error: The length of name exceeds 32 characters.");
                         exit(-1);
                     }
                 }
