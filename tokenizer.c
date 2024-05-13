@@ -48,7 +48,6 @@ TokenList* tokenize(const char* string)
             for(; (*string) == '>' || (*string) == '<'; string++)
             {
                 value += (*string) == '>' ? 1 : -1;
-                string++;
             }
 
             Token* token = (Token*)malloc(sizeof(Token));
