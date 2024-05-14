@@ -1,7 +1,9 @@
 #ifndef _AST_H
 #define _AST_H
 
+#include <stdio.h>
 #include <stdlib.h>
+#include "tokenizer.h"
 
 typedef enum _AstType
 {
@@ -25,5 +27,7 @@ typedef struct _AST
 AST* createAST(AstType type);
 void addAstToAstBody(AST* ast, AST* node);
 void freeAST(AST* ast);
+
+AST* parse(TokenList* tokenList);
 
 #endif

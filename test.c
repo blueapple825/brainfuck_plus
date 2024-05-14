@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "tokenizer.h"
+#include "ast.h"
 
 void printToken(Token* token)
 {
@@ -42,14 +43,15 @@ void printToken(Token* token)
 
 int main()
 {
-    TokenList* tokenList = tokenize("1>+>>>11+---+++++92++9----------8[+++<-*],.{!!2>>}{!@#$%&*()!@#$%&*()!@#$%&*()!@#$%&*()}");
-    printf("length: %d\n", tokenList->length);
-    for(int i = 0; i < tokenList->length; i++)
-    {
-        printToken(tokenList->list[i]);
-    }
+    TokenList* tokenList = tokenize(">>>>]>");
+    printToken(tokenList->list[1]);
+    // printf("%d\n", tokenList->length);
+    AST* ast = parse(tokenList);
+
+    printf("test\n");
 
     freeTokenList(tokenList);
+    freeAST(ast);
 
     return 0;
 }

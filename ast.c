@@ -31,3 +31,27 @@ void freeAST(AST* ast)
     free(ast->body);
     free(ast);
 }
+
+AST* parse(TokenList* tokenList)
+{
+    AST* ast = createAST(PROGRAM);
+
+    for(int i = 0; i < tokenList->length; i++)
+    {
+        switch(tokenList->list[i]->type)
+        {
+            case LOOP_END:
+            {
+                fprintf(stdout, "%s\n", "syntax error: The pairs of LOOP do not match.");
+                exit(-1);
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+
+    return ast;
+}

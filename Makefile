@@ -20,8 +20,8 @@ $(TARGET): bfp.o tokenizer.o
 bfp.o: bfp.c
 	gcc bfp.c -c -o bfp.o
 
-$(TEST): test.o tokenizer.o
-	gcc test.o tokenizer.o -o $(TEST)
+$(TEST): test.o tokenizer.o ast.o
+	gcc test.o tokenizer.o ast.o -o $(TEST)
 
 test.o: test.c
 	gcc test.c -c -o test.o
