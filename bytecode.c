@@ -19,8 +19,6 @@ void setBytecode(Bytecode* bytecode, const char* code)
 
     bytecode->code = (char*)realloc(bytecode->code, bytecode->realLength);
     strcpy(bytecode->code, code);
-
-    return bytecode;
 }
 
 void addBytecode(Bytecode* bytecode, const char* code)
