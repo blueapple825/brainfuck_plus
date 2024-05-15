@@ -32,7 +32,7 @@ test: $(TEST)
 tokenizer.o: tokenizer.c tokenizer.h
 	gcc tokenizer.c -c -o tokenizer.o
 
-bytecode.o: bytecode.c
+bytecode.o: bytecode.c bytecode.h
 	gcc bytecode.c -c -o bytecode.o
 
 clean:
