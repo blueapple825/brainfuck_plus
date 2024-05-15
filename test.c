@@ -44,13 +44,13 @@ void printToken(Token* token)
 int main()
 {
     Bytecode* bytecode = createBytecode("test");
-    printf("%s\b", bytecode->code);
+    printf("%s\n------------------------\n", bytecode->code);
 
     setBytecode(bytecode, "AAAAAAAAAAAAAAAAAA1");
-    printf("%s\b", bytecode->code);
+    printf("%s\n------------------------\n", bytecode->code);
 
     addBytecode(bytecode, "TEST\n\nAAA!!!!!!!!!!1111111111111111111111111\na");
-    printf("%s\b", bytecode->code);
+    printf("%s\n------------------------\n", bytecode->code);
 
     return 0;
 }
