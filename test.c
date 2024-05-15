@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "tokenizer.h"
+#include "bytecode.h"
 
 void printToken(Token* token)
 {
@@ -42,12 +43,14 @@ void printToken(Token* token)
 
 int main()
 {
-    TokenList* tokenList = tokenize(">>>>]>");
-    printToken(tokenList->list[1]);
+    Bytecode* bytecode = createBytecode("test");
+    printf("%s\b", bytecode->code);
 
-    printf("test\n");
+    setBytecode(bytecode, "AAAAAAAAAAAAAAAAAA1");
+    printf("%s\b", bytecode->code);
 
-    freeTokenList(tokenList);
+    addBytecode(bytecode, "TEST\n\nAAA!!!!!!!!!!1111111111111111111111111\na");
+    printf("%s\b", bytecode->code);
 
     return 0;
 }
