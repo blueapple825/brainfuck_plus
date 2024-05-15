@@ -5,20 +5,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include "tokenizer.h"
+#include "type.h"
 
 typedef struct _Bytecode Bytecode;
 
 typedef struct _Bytecode
 {
-    char* code;
+    byte* code;
     int length;
     int realLength;
 }Bytecode;
 
-Bytecode* createBytecode(const char* code);
-void setBytecode(Bytecode* bytecode, const char* code);
-void addBytecode(Bytecode* bytecode, const char* code);
+Bytecode* createBytecode(const byte* code);
+void setBytecode(Bytecode* bytecode, const byte* code);
+void addBytecode(Bytecode* bytecode, const byte* code);
 
-void tokenToBytecode(TokenList* tokenList);
+Bytecode* tokenToBytecode(TokenList* tokenList);
 
 #endif
