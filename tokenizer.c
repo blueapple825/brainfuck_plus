@@ -45,16 +45,33 @@ TokenList* tokenize(const char* string)
         case '<':
         {
             int value = 0;
-            for(; (*string) == '>' || (*string) == '<'; string++)
+            while((*string) == '>' || (*string) == '<')
             {
                 value += (*string) == '>' ? 1 : -1;
+                string++;
             }
 
-            if(value != 0)
+            TokenType tokenType = ADD_POINTER;
+            if(value < 0)
+            {
+                tokenType = SUB_POINTER;
+                value = 0 - value;
+            }
+
+            while(value != 0)
             {
                 Token* token = (Token*)malloc(sizeof(Token));
-                token->type = ADD_POINTER;
-                token->valueNumber = value;
+                token->type = tokenType;
+                if(value > 255)
+                {
+                    token->valueNumber = 255;
+                    value -= 255;
+                }
+                else
+                {
+                    token->valueNumber = value;
+                    value = 0;
+                }
                 addTokenToTokenList(tokenList, token);
             }
 
@@ -64,16 +81,33 @@ TokenList* tokenize(const char* string)
         case '-':
         {
             int value = 0;
-            for(; (*string) == '+' || (*string) == '-'; string++)
+            while((*string) == '+' || (*string) == '-')
             {
                 value += (*string) == '+' ? 1 : -1;
+                string++;
             }
 
-            if(value != 0)
+            TokenType tokenType = ADD_VALUE;
+            if(value < 0)
+            {
+                tokenType = SUB_VALUE;
+                value = 0 - value;
+            }
+
+            while(value != 0)
             {
                 Token* token = (Token*)malloc(sizeof(Token));
-                token->type = ADD_VALUE;
-                token->valueNumber = value;
+                token->type = tokenType;
+                if(value > 255)
+                {
+                    token->valueNumber = 255;
+                    value -= 255;
+                }
+                else
+                {
+                    token->valueNumber = value;
+                    value = 0;
+                }
                 addTokenToTokenList(tokenList, token);
             }
 

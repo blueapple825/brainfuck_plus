@@ -2,15 +2,18 @@
 #define  _TOKENIZER_H
 
 #include <stdlib.h>
+#include "type.h"
 
 typedef enum _TokenType TokenType;
 
 typedef enum _TokenType
 {
     ADD_POINTER,
+    SUB_POINTER,
     PUSH_POINTER,
     POP_POINTER,
     ADD_VALUE,
+    SUB_VALUE,
     PRINT,
     INPUT,
     LOOP_START,
@@ -26,7 +29,7 @@ typedef struct _TokenList TokenList;
 typedef struct _Token
 {
     TokenType type;
-    int valueNumber;
+    byte valueNumber;
     char valueString[33];
 }Token;
 
