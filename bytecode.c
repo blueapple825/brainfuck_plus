@@ -59,51 +59,51 @@ Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint)
         Token* token = tokenList->list[i];
         switch(token->type)
         {
-        case ADD_POINTER:
+            case ADD_POINTER:
             {
                 addByte(bytecode, 0x01);
                 addByte(bytecode, token->valueNumber);
                 break;
             }
-        case SUB_POINTER:
+            case SUB_POINTER:
             {
                 addByte(bytecode, 0x02);
                 addByte(bytecode, token->valueNumber);
                 break;
             }
-        case PUSH_POINTER:
+            case PUSH_POINTER:
             {
                 addByte(bytecode, 0x03);
                 break;
             }
-        case POP_POINTER:
+            case POP_POINTER:
             {
                 addByte(bytecode, 0x04);
                 break;
             }
-        case ADD_VALUE:
+            case ADD_VALUE:
             {
                 addByte(bytecode, 0x05);
                 addByte(bytecode, token->valueNumber);
                 break;
             }
-        case SUB_VALUE:
+            case SUB_VALUE:
             {
                 addByte(bytecode, 0x06);
                 addByte(bytecode, token->valueNumber);
                 break;
             }
-        case PRINT:
+            case PRINT:
             {
                 addByte(bytecode, 0x07);
                 break;
             }
-        case INPUT:
+            case INPUT:
             {
                 addByte(bytecode, 0x08);
                 break;
             }
-        case LOOP_START:
+            case LOOP_START:
             {
                 Bytecode* codeBlock = tokenToBytecode(tokenList, i + 1);
                 int jmpDist = codeBlock->length + 2;
@@ -122,7 +122,7 @@ Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint)
 
                 break;
             }
-        case LOOP_END:
+            case LOOP_END:
             {
                 int jmpDist = -bytecode->length - 1;
 
@@ -134,7 +134,7 @@ Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint)
 
                 return bytecode;
             }
-        case SET_POINTER:
+            case SET_POINTER:
             {
                 addByte(bytecode, 0x0D);
                 break;
