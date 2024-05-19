@@ -14,6 +14,7 @@ typedef struct _Bytecode
     byte* code;
     int length;
     int realLength;
+    int tokenCount;
 }Bytecode;
 
 Bytecode* createBytecode(const byte* code);

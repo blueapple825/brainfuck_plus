@@ -124,7 +124,7 @@ Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint)
             }
             case LOOP_END:
             {
-                int jmpDist = -bytecode->length - 1;
+                int jmpDist = -bytecode->length - 2;
 
                 addByte(bytecode, 0x0A);
                 addByte(bytecode, (jmpDist >> 24) & 0xFF);
