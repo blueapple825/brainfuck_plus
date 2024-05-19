@@ -101,6 +101,11 @@ Bytecode* tokenToBytecode(TokenList* tokenList)
                 addByte(bytecode, 0x08);
                 break;
             }
+        case SET_POINTER:
+            {
+                addByte(bytecode, 0x0C);
+                break;
+            }
         }
     }
 

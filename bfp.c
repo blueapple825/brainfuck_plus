@@ -21,49 +21,54 @@ void stepBrainfuckPlus(BrainfuckPlus* bfp)
     byte* code = bfp->bytecode->code;
     switch(code[bfp->codePointer])
     {
-        case 0x01: // ADD_POINTER
+        case 0x01: // ADD_POINTER, PADD
         {
             bfp->codePointer++;
             bfp->memoryPointer += code[bfp->codePointer];
             break;
         }
-        case 0x02: // SUB_POINTER
+        case 0x02: // SUB_POINTER, PSUB
         {
             bfp->codePointer++;
             bfp->memoryPointer -= code[bfp->codePointer];
             break;
         }
-        case 0x03: // PUSH_POINTER
+        case 0x03: // PUSH_POINTER, PPUSH
         {
             bfp->pointerStack = pushStack(bfp->pointerStack, bfp->memoryPointer);
             break;
         }
-        case 0x04: // POP_POINTER
+        case 0x04: // POP_POINTER, PPOP
         {
             bfp->memoryPointer = bfp->pointerStack->value;
             bfp->pointerStack = popStack(bfp->pointerStack);
             break;
         }
-        case 0x05: // ADD_VALUE
+        case 0x05: // ADD_VALUE, VADD
         {
             bfp->codePointer++;
             bfp->memory[bfp->memoryPointer] += code[bfp->codePointer];
             break;
         }
-        case 0x06: // SUB_VALUE
+        case 0x06: // SUB_VALUE, VSUB
         {
             bfp->codePointer++;
             bfp->memory[bfp->memoryPointer] -= code[bfp->codePointer];
             break;
         }
-        case 0x07: // PRINT
+        case 0x07: // PRINT, OUT
         {
             printf("%c", bfp->memory[bfp->memoryPointer]);
             break;
         }
-        case 0x08: // INPUT
+        case 0x08: // INPUT, IN
         {
             scanf("%c", &bfp->memory[bfp->memoryPointer]);
+            break;
+        }
+        case 0x0C: // SET_POINTER, SPNT
+        {
+            bfp->memoryPointer = bfp->memory[bfp->memoryPointer];
             break;
         }
     }
