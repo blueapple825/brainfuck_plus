@@ -16,4 +16,11 @@ typedef struct _BrainfuckPlus
     unsigned int codePointer;
 }BrainfuckPlus;
 
+BrainfuckPlus* setupBrainfuckPlus(Bytecode* bytecode);
+
+void stepBrainfuckPlus(BrainfuckPlus* brainfuckPlus);
+void freeBrainfuckPlus(BrainfuckPlus* brainfuckPlus);
+
+void runBrainfuckPlus(const char* code);
+
 #endif
