@@ -50,13 +50,7 @@ void printToken(Token* token)
 
 int main()
 {
-    TokenList* tokenList = tokenize("+++++[>++++++++++<-]>-.");
-    Bytecode* bytecode = tokenToBytecode(tokenList, 0);
-
-    for(int i = 0; i < bytecode->length; i++)
-    {
-        printf("0x%02X\n", bytecode->code[i]);
-    }
+    runBrainfuckPlus("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++++++++++++++.------------.<<+++++++++++++++.>.+++.------.--------.>+.");
 
     return 0;
 }
