@@ -25,7 +25,7 @@ brainfuck with miscellaneous features added
 
 `]` - End of loop, move to the start of the loop (Not implemented)
 
-`*` - Change the pointer to the value currently pointed by the pointer (Not implemented)
+`*` - Change the pointer to the value currently pointed by the pointer
 
 `{name}[code]` - Declare subroutine (Not implemented)
 
