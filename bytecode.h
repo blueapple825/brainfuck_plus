@@ -21,6 +21,8 @@ void setBytecode(Bytecode* bytecode, const byte* code);
 void addBytecode(Bytecode* bytecode, const byte* code);
 void addByte(Bytecode* bytecode, byte code);
 
+void freeBytecode(Bytecode* bytecode);
+
 Bytecode* tokenToBytecode(TokenList* tokenList);
 
 #endif

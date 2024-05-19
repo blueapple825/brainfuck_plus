@@ -106,3 +106,9 @@ Bytecode* tokenToBytecode(TokenList* tokenList)
 
     return bytecode;
 }
+
+void freeBytecode(Bytecode* bytecode)
+{
+    free(bytecode->code);
+    free(bytecode);
+}
