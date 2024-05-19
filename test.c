@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "tokenizer.h"
 #include "bytecode.h"
+#include "stack.h"
 
 void printToken(Token* token)
 {
@@ -49,13 +50,20 @@ void printToken(Token* token)
 
 int main()
 {
-    TokenList* tokenList = tokenize(",++++.>++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.");
-    Bytecode* bytecode = tokenToBytecode(tokenList);
-
-    for(int i = 0; i < bytecode->length; i++)
+    Stack* stack = createStack(0);
+    for(int i = 1; i <= 10; i++)
     {
-        printf("0x%02X\n", bytecode->code[i]);
+        stack = pushStack(stack, i);
     }
+
+    for(int i = 0; i < 10; i++)
+    {
+        printf("%d\n", stack->value);
+        stack = popStack(stack);
+    }
+    printf("%d\n", stack->value);
+
+    freeStack(stack);
 
     return 0;
 }
