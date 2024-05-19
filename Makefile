@@ -14,11 +14,11 @@ else
 	RM := rm
 endif
 
-$(TARGET): main.o tokenizer.o bytecode.o bfp.o
-	gcc main.o tokenizer.o bytecode.o -o $(TARGET)
+$(TARGET): main.o tokenizer.o bytecode.o stack.o bfp.o
+	gcc main.o tokenizer.o bytecode.o stack.o bfp.o -o $(TARGET)
 
-$(TEST): test.o tokenizer.o bytecode.o bfp.o
-	gcc test.o tokenizer.o bytecode.o -o $(TEST)
+$(TEST): test.o tokenizer.o bytecode.o stack.o bfp.o
+	gcc test.o tokenizer.o bytecode.o stack.o bfp.o -o $(TEST)
 
 test: $(TEST)
 	$()
@@ -34,6 +34,9 @@ tokenizer.o: tokenizer.c tokenizer.h
 
 bytecode.o: bytecode.c bytecode.h
 	gcc bytecode.c -c -o bytecode.o
+
+stack.o: stack.c stack.h
+	gcc stack.c -c -o stack.o
 
 bfp.o: bfp.c bfp.h
 	gcc bfp.c -c -o bfp.o
