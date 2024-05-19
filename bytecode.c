@@ -50,5 +50,59 @@ void addByte(Bytecode* bytecode, byte code)
 
 Bytecode* tokenToBytecode(TokenList* tokenList)
 {
-    // TODO: 만들기 귀찮다. 오늘 학교 끝나고 ㄱ
+    Bytecode* bytecode = createBytecode("");
+
+    for(int i = 0; i < tokenList->length; i++)
+    {
+        Token* token = tokenList->list[i];
+        switch(token->type)
+        {
+        case ADD_POINTER:
+            {
+                addByte(bytecode, 0x01);
+                addByte(bytecode, token->valueNumber);
+                break;
+            }
+        case SUB_POINTER:
+            {
+                addByte(bytecode, 0x02);
+                addByte(bytecode, token->valueNumber);
+                break;
+            }
+        case PUSH_POINTER:
+            {
+                addByte(bytecode, 0x03);
+                break;
+            }
+        case POP_POINTER:
+            {
+                addByte(bytecode, 0x04);
+                break;
+            }
+        case ADD_VALUE:
+            {
+                addByte(bytecode, 0x05);
+                addByte(bytecode, token->valueNumber);
+                break;
+            }
+        case SUB_VALUE:
+            {
+                addByte(bytecode, 0x06);
+                addByte(bytecode, token->valueNumber);
+                break;
+            }
+        case PRINT:
+            {
+                addByte(bytecode, 0x07);
+                break;
+            }
+        case INPUT:
+            {
+                addByte(bytecode, 0x08);
+                break;
+            }
+        }
+    }
+
+    return bytecode;
 }
