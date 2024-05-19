@@ -5,6 +5,7 @@ Bytecode* createBytecode(const byte* code)
     Bytecode* bytecode = (Bytecode*)malloc(sizeof(Bytecode));
     bytecode->length = strlen(code);
     bytecode->realLength = bytecode->length * 1.5;
+    bytecode->tokenCount = 0;
 
     bytecode->code = (byte*)malloc(sizeof(byte) * bytecode->realLength);
     strcpy(bytecode->code, code);
@@ -24,7 +25,7 @@ void setBytecode(Bytecode* bytecode, const byte* code)
 void addBytecode(Bytecode* bytecode, const byte* code)
 {
     int originalLength = bytecode->length;
-    bytecode->length = strlen(code);
+    bytecode->length += strlen(code);
     if(bytecode->length >= bytecode->realLength)
     {
         bytecode->realLength = bytecode->length * 1.5;
@@ -54,6 +55,7 @@ Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint)
 
     for(int i = startPoint; i < tokenList->length; i++)
     {
+        bytecode->tokenCount++;
         Token* token = tokenList->list[i];
         switch(token->type)
         {
@@ -104,13 +106,17 @@ Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint)
         case LOOP_START:
             {
                 Bytecode* codeBlock = tokenToBytecode(tokenList, i + 1);
+                int jmpDist = codeBlock->length + 2;
 
                 addByte(bytecode, 0x09);
-                addByte(bytecode, (codeBlock->length >> 24) & 0xFF);
-                addByte(bytecode, (codeBlock->length >> 16) & 0xFF);
-                addByte(bytecode, (codeBlock->length >> 8) & 0xFF);
-                addByte(bytecode, codeBlock->length & 0xFF);
+                addByte(bytecode, (jmpDist >> 24) & 0xFF);
+                addByte(bytecode, (jmpDist >> 16) & 0xFF);
+                addByte(bytecode, (jmpDist >> 8) & 0xFF);
+                addByte(bytecode, jmpDist & 0xFF);
                 addBytecode(bytecode, codeBlock->code);
+
+                bytecode->tokenCount += codeBlock->tokenCount;;
+                i += codeBlock->tokenCount;
 
                 freeBytecode(codeBlock);
 
@@ -118,14 +124,13 @@ Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint)
             }
         case LOOP_END:
             {
-                // byte jmpPoint[4];
-                // jmpPoint[0] = (bytecode->length >> 24) & 0xFF;
-                // jmpPoint[1] = (bytecode->length >> 16) & 0xFF;
-                // jmpPoint[2] = (bytecode->length >> 8) & 0xFF;
-                // jmpPoint[3] = bytecode->length & 0xFF;
+                int jmpDist = -bytecode->length - 1;
 
-                // addByte(bytecode, 0x0A);
-                // addBytecode(bytecode, jmpPoint);
+                addByte(bytecode, 0x0A);
+                addByte(bytecode, (jmpDist >> 24) & 0xFF);
+                addByte(bytecode, (jmpDist >> 16) & 0xFF);
+                addByte(bytecode, (jmpDist >> 8) & 0xFF);
+                addByte(bytecode, jmpDist & 0xFF);
 
                 return bytecode;
             }
