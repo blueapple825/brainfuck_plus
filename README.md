@@ -21,9 +21,9 @@ brainfuck with miscellaneous features added
 
 `,` - Receive input at the location pointed by the pointer
 
-`[` - Start of loop, end loop if the value pointed by the pointer is 0 (Not implemented)
+`[` - Start of loop, end loop if the value pointed by the pointer is 0 (implementing)
 
-`]` - End of loop, move to the start of the loop (Not implemented)
+`]` - End of loop, move to the start of the loop (implementing)
 
 `*` - Change the pointer to the value currently pointed by the pointer
 
