@@ -34,6 +34,20 @@ void addBytecode(Bytecode* bytecode, const byte* code)
     strcpy(bytecode->code + originalLength, code);
 }
 
+void addByte(Bytecode* bytecode, byte code)
+{
+    int originalLength = bytecode->length;
+    bytecode->length += 1;
+    if(bytecode->length >= bytecode->realLength)
+    {
+        bytecode->realLength = bytecode->length * 1.5;
+        bytecode->code = (byte*)realloc(bytecode->code, bytecode->realLength);
+    }
+
+    bytecode->code[originalLength] = code;
+    bytecode->code[originalLength + 1] = 0;
+}
+
 Bytecode* tokenToBytecode(TokenList* tokenList)
 {
     // TODO: 만들기 귀찮다. 오늘 학교 끝나고 ㄱ

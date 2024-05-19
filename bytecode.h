@@ -19,6 +19,7 @@ typedef struct _Bytecode
 Bytecode* createBytecode(const byte* code);
 void setBytecode(Bytecode* bytecode, const byte* code);
 void addBytecode(Bytecode* bytecode, const byte* code);
+void addByte(Bytecode* bytecode, byte code);
 
 Bytecode* tokenToBytecode(TokenList* tokenList);
 
