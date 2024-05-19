@@ -5,21 +5,21 @@ brainfuck with miscellaneous features added
 
 ## command
 
-`>` - Increase pointer (Not implemented)
+`>` - Increase pointer
 
-`<` - Decrease pointer (Not implemented)
+`<` - Decrease pointer
 
-`^` - Push the pointer value onto the stack (Not implemented)
+`^` - Push the pointer value onto the stack
 
-`~` - Pop the pointer value from the stack (Not implemented)
+`~` - Pop the pointer value from the stack
 
-`+` - Increase the value pointed by the pointer (Not implemented)
+`+` - Increase the value pointed by the pointer
 
-`-` - Decrease the value pointed by the pointer (Not implemented)
+`-` - Decrease the value pointed by the pointer
 
-`.` - Output the value pointed by the pointer (Not implemented)
+`.` - Output the value pointed by the pointer
 
-`,` - Receive input at the location pointed by the pointer (Not implemented)
+`,` - Receive input at the location pointed by the pointer
 
 `[` - Start of loop, end loop if the value pointed by the pointer is 0 (Not implemented)
 
