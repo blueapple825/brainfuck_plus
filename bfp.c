@@ -66,7 +66,7 @@ void stepBrainfuckPlus(BrainfuckPlus* bfp)
             scanf("%c", &bfp->memory[bfp->memoryPointer]);
             break;
         }
-        case 0x0C: // SET_POINTER, SPNT
+        case 0x0D: // SET_POINTER, SPNT
         {
             bfp->memoryPointer = bfp->memory[bfp->memoryPointer];
             break;
