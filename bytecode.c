@@ -48,11 +48,11 @@ void addByte(Bytecode* bytecode, byte code)
     bytecode->code[originalLength + 1] = 0;
 }
 
-Bytecode* tokenToBytecode(TokenList* tokenList)
+Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint)
 {
     Bytecode* bytecode = createBytecode("");
 
-    for(int i = 0; i < tokenList->length; i++)
+    for(int i = startPoint; i < tokenList->length; i++)
     {
         Token* token = tokenList->list[i];
         switch(token->type)
@@ -100,6 +100,34 @@ Bytecode* tokenToBytecode(TokenList* tokenList)
             {
                 addByte(bytecode, 0x08);
                 break;
+            }
+        case LOOP_START:
+            {
+                Bytecode* codeBlock = tokenToBytecode(tokenList, i + 1);
+
+                addByte(bytecode, 0x09);
+                addByte(bytecode, (codeBlock->length >> 24) & 0xFF);
+                addByte(bytecode, (codeBlock->length >> 16) & 0xFF);
+                addByte(bytecode, (codeBlock->length >> 8) & 0xFF);
+                addByte(bytecode, codeBlock->length & 0xFF);
+                addBytecode(bytecode, codeBlock->code);
+
+                freeBytecode(codeBlock);
+
+                break;
+            }
+        case LOOP_END:
+            {
+                // byte jmpPoint[4];
+                // jmpPoint[0] = (bytecode->length >> 24) & 0xFF;
+                // jmpPoint[1] = (bytecode->length >> 16) & 0xFF;
+                // jmpPoint[2] = (bytecode->length >> 8) & 0xFF;
+                // jmpPoint[3] = bytecode->length & 0xFF;
+
+                // addByte(bytecode, 0x0A);
+                // addBytecode(bytecode, jmpPoint);
+
+                return bytecode;
             }
         case SET_POINTER:
             {

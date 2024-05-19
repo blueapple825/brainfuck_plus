@@ -23,6 +23,6 @@ void addByte(Bytecode* bytecode, byte code);
 
 void freeBytecode(Bytecode* bytecode);
 
-Bytecode* tokenToBytecode(TokenList* tokenList);
+Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint);
 
 #endif
