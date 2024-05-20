@@ -114,6 +114,17 @@ void stepBrainfuckPlus(BrainfuckPlus* bfp)
 
             break;
         }
+        case 0x0B: // ?, CPUSH
+        {
+            bfp->codePointerStack = pushStack(bfp->codePointerStack, bfp->codePointer);
+            break;
+        }
+        case 0x0C: // ?, CPOP
+        {
+            bfp->codePointer = bfp->codePointerStack->value;
+            bfp->codePointerStack = popStack(bfp->codePointerStack);
+            break;
+        }
         case 0x0D: // SET_POINTER, SPNT
         {
             bfp->memoryPointer = bfp->memory[bfp->memoryPointer];
@@ -144,6 +155,7 @@ void freeBrainfuckPlus(BrainfuckPlus* bfp)
 {
     freeBytecode(bfp->bytecode);
     freeStack(bfp->pointerStack);
+    freeStack(bfp->codePointerStack);
     free(bfp);
 }
 
