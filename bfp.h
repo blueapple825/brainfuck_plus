@@ -12,6 +12,7 @@ typedef struct _BrainfuckPlus
     Bytecode* bytecode;
     byte memory[65536];
     Stack* pointerStack;
+    Stack* codePointerStack;
     unsigned short memoryPointer;
     unsigned int codePointer;
 }BrainfuckPlus;
