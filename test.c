@@ -50,7 +50,35 @@ void printToken(Token* token)
 
 int main()
 {
-    runBrainfuckPlus("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++++++++++++++.------------.<<+++++++++++++++.>.+++.------.--------.>+.");
+    // runBrainfuckPlus("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++++++++++++++.------------.<<+++++++++++++++.>.+++.------.--------.>+.");
+
+    FunctionList* funcList = createFunctionList();
+
+    TokenList* tokenList = tokenize("++{.}[+++++]+++");
+    Bytecode* bytecode = tokenToBytecode(tokenList, 0, funcList, 0);
+
+    printf("** token list**\n");
+    for(int i = 0; i < tokenList->length; i++)
+    {
+        printToken(tokenList->list[i]);
+    }
+
+    printf("\n** function data **\n");
+    for(int i = 0; i < funcList->length; i++)
+    {
+        FunctionData* data = funcList->list[i];
+        printf("%s: %d\n", data->name, data->startPoint);
+    }
+
+    printf("\n** bytecode **\n");
+    for(int i = 0; i < bytecode->length; i++)
+    {
+        printf("0x%02X\n", bytecode->code[i]);
+    }
+
+    freeFunctionList(funcList);
+    freeTokenList(tokenList);
+    freeBytecode(bytecode);
 
     return 0;
 }
