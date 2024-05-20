@@ -50,9 +50,9 @@ void printToken(Token* token)
 
 int main()
 {
-    // runBrainfuckPlus("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++++++++++++++.------------.<<+++++++++++++++.>.+++.------.--------.>+.");
+    runBrainfuckPlus("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++++++++++++++.------------.<<+++++++++++++++.>.+++.------.--------.>+.");
 
-    FunctionList* funcList = createFunctionList();
+/*    FunctionList* funcList = createFunctionList();
 
     TokenList* tokenList = tokenize("++{.}[+++++]+++");
     Bytecode* bytecode = tokenToBytecode(tokenList, 0, funcList, 0);
@@ -78,7 +78,7 @@ int main()
 
     freeFunctionList(funcList);
     freeTokenList(tokenList);
-    freeBytecode(bytecode);
+    freeBytecode(bytecode);*/
 
     return 0;
 }
