@@ -131,8 +131,12 @@ void freeBrainfuckPlus(BrainfuckPlus* bfp)
 
 void runBrainfuckPlus(const char* code)
 {
+    FunctionList* funcList = createFunctionList();
+
     TokenList* tokenList = tokenize(code);
-    Bytecode* bytecode = tokenToBytecode(tokenList, 0);
+    Bytecode* bytecode = tokenToBytecode(tokenList, 0, funcList, 0);
+    freeFunctionList(funcList);
+
     BrainfuckPlus* bfp = setupBrainfuckPlus(bytecode);
     freeTokenList(tokenList);
 

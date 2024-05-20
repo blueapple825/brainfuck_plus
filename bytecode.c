@@ -1,5 +1,42 @@
 #include "bytecode.h"
 
+FunctionList* createFunctionList()
+{
+    FunctionList* list = (FunctionList*)malloc(sizeof(FunctionList));
+    list->list = malloc(0);
+    list->length = 0;
+    list->realLength = 0;
+
+    return list;
+}
+
+void addFunctionData(FunctionList* list, char name[33], int startPoint)
+{
+    FunctionData* data = (FunctionData*)malloc(sizeof(FunctionData));
+    strcpy(data->name, name);
+    data->startPoint = startPoint;
+
+    int originalLength = list->length;
+    list->length += 1;
+    if(list->length >= list->realLength)
+    {
+        list->realLength = list->length * 1.5;
+        list->list = (FunctionData**)realloc(list->list, list->realLength);
+    }
+
+    list->list[originalLength] = data;
+}
+
+void freeFunctionList(FunctionList* list)
+{
+    for(int i = 0; i < list->length; i++)
+    {
+        free(list->list[i]);
+    }
+    free(list->list);
+    free(list);
+}
+
 Bytecode* createBytecode(const byte* code)
 {
     Bytecode* bytecode = (Bytecode*)malloc(sizeof(Bytecode));
@@ -49,7 +86,7 @@ void addByte(Bytecode* bytecode, byte code)
     bytecode->code[originalLength + 1] = 0;
 }
 
-Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint)
+Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint, FunctionList* funcList, int offset)
 {
     Bytecode* bytecode = createBytecode("");
 
@@ -105,7 +142,7 @@ Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint)
             }
             case LOOP_START:
             {
-                Bytecode* codeBlock = tokenToBytecode(tokenList, i + 1);
+                Bytecode* codeBlock = tokenToBytecode(tokenList, i + 1, funcList, offset + bytecode->length);
                 int jmpDist = codeBlock->length + 2;
 
                 addByte(bytecode, 0x09);
@@ -115,7 +152,15 @@ Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint)
                 addByte(bytecode, jmpDist & 0xFF);
                 addBytecode(bytecode, codeBlock->code);
 
-                bytecode->tokenCount += codeBlock->tokenCount;;
+                jmpDist = -codeBlock->length - 2;
+
+                addByte(bytecode, 0x0A);
+                addByte(bytecode, (jmpDist >> 24) & 0xFF);
+                addByte(bytecode, (jmpDist >> 16) & 0xFF);
+                addByte(bytecode, (jmpDist >> 8) & 0xFF);
+                addByte(bytecode, jmpDist & 0xFF);
+
+                bytecode->tokenCount += codeBlock->tokenCount;
                 i += codeBlock->tokenCount;
 
                 freeBytecode(codeBlock);
@@ -124,19 +169,44 @@ Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint)
             }
             case LOOP_END:
             {
-                int jmpDist = -bytecode->length - 2;
-
-                addByte(bytecode, 0x0A);
-                addByte(bytecode, (jmpDist >> 24) & 0xFF);
-                addByte(bytecode, (jmpDist >> 16) & 0xFF);
-                addByte(bytecode, (jmpDist >> 8) & 0xFF);
-                addByte(bytecode, jmpDist & 0xFF);
-
                 return bytecode;
             }
             case SET_POINTER:
             {
                 addByte(bytecode, 0x0D);
+                break;
+            }
+            case NAME:
+            {
+                char* funcName = token->valueString;
+
+                i++;
+                bytecode->tokenCount++;
+                token = tokenList->list[i];
+                if(token->type == LOOP_START)
+                {
+                    addFunctionData(funcList, funcName, offset + bytecode->length + 6);
+
+                    Bytecode* codeBlock = tokenToBytecode(tokenList, i + 1, funcList, offset + bytecode->length);
+                    int jmpDist = codeBlock->length + 1;
+
+                    addByte(bytecode, 0x0E);
+                    addByte(bytecode, (jmpDist >> 24) & 0xFF);
+                    addByte(bytecode, (jmpDist >> 16) & 0xFF);
+                    addByte(bytecode, (jmpDist >> 8) & 0xFF);
+                    addByte(bytecode, jmpDist & 0xFF);
+                    addBytecode(bytecode, codeBlock->code);
+
+                    bytecode->tokenCount += codeBlock->tokenCount;
+                    i += codeBlock->tokenCount;
+
+                    freeBytecode(codeBlock);
+                }
+                else
+                {
+                    // TODO: 예외처리
+                }
+
                 break;
             }
         }
