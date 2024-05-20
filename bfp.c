@@ -80,6 +80,7 @@ void stepBrainfuckPlus(BrainfuckPlus* bfp)
                     bfp->codePointer++;
                 }
 
+                bfp->codePointer -= 4;
                 bfp->codePointer += jmpDist;
             }
             else
@@ -116,6 +117,23 @@ void stepBrainfuckPlus(BrainfuckPlus* bfp)
         case 0x0D: // SET_POINTER, SPNT
         {
             bfp->memoryPointer = bfp->memory[bfp->memoryPointer];
+            break;
+        }
+        case 0x0E: // ?, JMP
+        {
+            bfp->codePointer++;
+
+            int jmpDist = 0;
+            for(int i = 0; i < 4; i++)
+            {
+                jmpDist <<= 8;
+                jmpDist += code[bfp->codePointer];
+                bfp->codePointer++;
+            }
+
+            bfp->codePointer -= 4;
+            bfp->codePointer += jmpDist;
+
             break;
         }
     }
