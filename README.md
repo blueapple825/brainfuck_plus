@@ -1,4 +1,4 @@
-# brainfuck_plus
+# brainfuck plus
 
 brainfuck with miscellaneous features added
 
@@ -27,7 +27,7 @@ brainfuck with miscellaneous features added
 
 `*` - Change the pointer to the value currently pointed by the pointer
 
-`{name}[code]` - Declare subroutine (Not implemented)
+`{name}[code]` - Define subroutine
 
 `!{name}` - Call subroutine (Not implemented)
 
