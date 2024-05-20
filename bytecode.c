@@ -188,6 +188,7 @@ Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint, FunctionList* fu
                     addFunctionData(funcList, funcName, offset + bytecode->length + 6);
 
                     Bytecode* codeBlock = tokenToBytecode(tokenList, i + 1, funcList, offset + bytecode->length);
+                    addByte(codeBlock, 0x0B);
                     int jmpDist = codeBlock->length + 1;
 
                     addByte(bytecode, 0x0E);
