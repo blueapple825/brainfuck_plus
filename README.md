@@ -29,6 +29,6 @@ brainfuck with miscellaneous features added
 
 `{name}[code]` - Define subroutine
 
-`!{name}` - Call subroutine (Not implemented)
+`!{name}` - Call subroutine
 
 `name` - Characters with ASCII codes ranging from 33 to 64 when converted (up to 32 characters)
