@@ -7,23 +7,23 @@
 #include "tokenizer.h"
 #include "type.h"
 
-typedef struct _FunctionData FunctionData;
-typedef struct _FunctionList FunctionList;
+typedef struct _SubroutineData SubroutineData;
+typedef struct _SubroutineList SubroutineList;
 
 typedef struct _Bytecode Bytecode;
 
-typedef struct _FunctionData
+typedef struct _SubroutineData
 {
     char name[33];
     unsigned int startPoint;
-}FunctionData;
+}SubroutineData;
 
-typedef struct _FunctionList
+typedef struct _SubroutineList
 {
-    FunctionData** list;
+    SubroutineData** list;
     int length;
     int realLength;
-}FunctionList;
+}SubroutineList;
 
 typedef struct _Bytecode
 {
@@ -33,18 +33,18 @@ typedef struct _Bytecode
     int tokenCount;
 }Bytecode;
 
-FunctionList* createFunctionList();
-void addFunctionData(FunctionList* list, char name[33], int startPoint);
+SubroutineList* createSubroutineList();
+void addSubroutineData(SubroutineList* list, char name[33], int startPoint);
 
-void freeFunctionList(FunctionList* list);
+void freeSubroutineList(SubroutineList* list);
 
 Bytecode* createBytecode(const byte* code);
 void setBytecode(Bytecode* bytecode, const byte* code);
-void addBytecode(Bytecode* bytecode, const byte* code);
+void addBytecode(Bytecode* bytecode, Bytecode* newCode);
 void addByte(Bytecode* bytecode, byte code);
 
 void freeBytecode(Bytecode* bytecode);
 
-Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint, FunctionList* funcList, int offset);
+Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint, SubroutineList* funcList, int offset);
 
 #endif

@@ -43,6 +43,9 @@ void printToken(Token* token)
         case 11:
             printf("NAME");
             break;
+        case 12:
+            printf("CALL");
+            break;
     }
 
     printf(": %d | %s\n", token->valueNumber, token->valueString);
@@ -50,12 +53,17 @@ void printToken(Token* token)
 
 int main()
 {
-    runBrainfuckPlus("++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++++++++++++++.------------.<<+++++++++++++++.>.+++.------.--------.>+.");
+    runBrainfuckPlus("{.}[++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++++++++++++++.------------.<<+++++++++++++++.>.+++.------.--------.>+.>[-]<[-]<[-]<[-]<[-]]+++++[>!{.}<-]");
 
-/*    FunctionList* funcList = createFunctionList();
+/*    SubroutineList* subList = createSubroutineList();
 
-    TokenList* tokenList = tokenize("++{.}[+++++]+++");
-    Bytecode* bytecode = tokenToBytecode(tokenList, 0, funcList, 0);
+//    TokenList* tokenList = tokenize("{.}[++++++++++]+++++[>!{.}<-]>-.");
+    TokenList* tokenList = tokenize("{.}[++++++++++[>+++++++>++++++++++>+++>+<<<<-]>++.>+.+++++++..+++.>++++++++++++++.------------.<<+++++++++++++++.>.+++.------.--------.>+.>[-]<[-]<[-]<[-]<[-]]+++++[>!{.}<-]");
+//    TokenList* tokenList = tokenize("{.}[+++++[>++++++++++<-]>-.[-]<]+++++++[>!{.}<-]");
+//    TokenList* tokenList = tokenize("++.--[...........]+++++[>++++++++++<-]>-.");
+//    TokenList* tokenList = tokenize("+++++[>+++++[>++<-]<-]>>-.");
+    Bytecode* bytecode = tokenToBytecode(tokenList, 0, subList, 0);
+    BrainfuckPlus* bfp = setupBrainfuckPlus(bytecode);
 
     printf("** token list**\n");
     for(int i = 0; i < tokenList->length; i++)
@@ -63,10 +71,10 @@ int main()
         printToken(tokenList->list[i]);
     }
 
-    printf("\n** function data **\n");
-    for(int i = 0; i < funcList->length; i++)
+    printf("\n** function list **\n");
+    for(int i = 0; i < subList->length; i++)
     {
-        FunctionData* data = funcList->list[i];
+        SubroutineData* data = subList->list[i];
         printf("%s: %d\n", data->name, data->startPoint);
     }
 
@@ -76,7 +84,13 @@ int main()
         printf("0x%02X\n", bytecode->code[i]);
     }
 
-    freeFunctionList(funcList);
+    printf("\n** output **\n");
+    while(bfp->codePointer <= bfp->bytecode->length)
+    {
+        stepBrainfuckPlus(bfp);
+    }
+
+    freeSubroutineList(subList);
     freeTokenList(tokenList);
     freeBytecode(bytecode);*/
 

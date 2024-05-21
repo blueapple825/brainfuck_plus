@@ -1,8 +1,8 @@
 #include "bytecode.h"
 
-FunctionList* createFunctionList()
+SubroutineList* createSubroutineList()
 {
-    FunctionList* list = (FunctionList*)malloc(sizeof(FunctionList));
+    SubroutineList* list = (SubroutineList*)malloc(sizeof(SubroutineList));
     list->list = malloc(0);
     list->length = 0;
     list->realLength = 0;
@@ -10,9 +10,9 @@ FunctionList* createFunctionList()
     return list;
 }
 
-void addFunctionData(FunctionList* list, char name[33], int startPoint)
+void addSubroutineData(SubroutineList* list, char name[33], int startPoint)
 {
-    FunctionData* data = (FunctionData*)malloc(sizeof(FunctionData));
+    SubroutineData* data = (SubroutineData*)malloc(sizeof(SubroutineData));
     strcpy(data->name, name);
     data->startPoint = startPoint;
 
@@ -21,13 +21,13 @@ void addFunctionData(FunctionList* list, char name[33], int startPoint)
     if(list->length >= list->realLength)
     {
         list->realLength = list->length * 1.5;
-        list->list = (FunctionData**)realloc(list->list, list->realLength);
+        list->list = (SubroutineData**)realloc(list->list, list->realLength);
     }
 
     list->list[originalLength] = data;
 }
 
-void freeFunctionList(FunctionList* list)
+void freeSubroutineList(SubroutineList* list)
 {
     for(int i = 0; i < list->length; i++)
     {
@@ -59,18 +59,22 @@ void setBytecode(Bytecode* bytecode, const byte* code)
     strcpy(bytecode->code, code);
 }
 
-void addBytecode(Bytecode* bytecode, const byte* code)
+void addBytecode(Bytecode* bytecode, Bytecode* newCode)
 {
     int originalLength = bytecode->length;
-    bytecode->length += strlen(code);
+    bytecode->length += newCode->length;
     if(bytecode->length >= bytecode->realLength)
     {
         bytecode->realLength = bytecode->length * 1.5;
         bytecode->code = (byte*)realloc(bytecode->code, bytecode->realLength);
     }
 
-    strcpy(bytecode->code + originalLength, code);
+    for(int i = 0; i < newCode->length; i++)
+    {
+        bytecode->code[i + originalLength] = newCode->code[i];
+    }
 }
+
 
 void addByte(Bytecode* bytecode, byte code)
 {
@@ -86,7 +90,7 @@ void addByte(Bytecode* bytecode, byte code)
     bytecode->code[originalLength + 1] = 0;
 }
 
-Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint, FunctionList* funcList, int offset)
+Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint, SubroutineList* subList, int offset)
 {
     Bytecode* bytecode = createBytecode("");
 
@@ -142,23 +146,23 @@ Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint, FunctionList* fu
             }
             case LOOP_START:
             {
-                Bytecode* codeBlock = tokenToBytecode(tokenList, i + 1, funcList, offset + bytecode->length);
-                int jmpDist = codeBlock->length + 2;
+                Bytecode* codeBlock = tokenToBytecode(tokenList, i + 1, subList, offset + bytecode->length);
+
+                int startPoint = bytecode->length + offset + 4;
+                int endPoint = startPoint + codeBlock->length + 5;
 
                 addByte(bytecode, 0x09);
-                addByte(bytecode, (jmpDist >> 24) & 0xFF);
-                addByte(bytecode, (jmpDist >> 16) & 0xFF);
-                addByte(bytecode, (jmpDist >> 8) & 0xFF);
-                addByte(bytecode, jmpDist & 0xFF);
-                addBytecode(bytecode, codeBlock->code);
-
-                jmpDist = -codeBlock->length - 2;
+                addByte(bytecode, (endPoint >> 24) & 0xFF);
+                addByte(bytecode, (endPoint >> 16) & 0xFF);
+                addByte(bytecode, (endPoint >> 8) & 0xFF);
+                addByte(bytecode, endPoint & 0xFF);
+                addBytecode(bytecode, codeBlock);
 
                 addByte(bytecode, 0x0A);
-                addByte(bytecode, (jmpDist >> 24) & 0xFF);
-                addByte(bytecode, (jmpDist >> 16) & 0xFF);
-                addByte(bytecode, (jmpDist >> 8) & 0xFF);
-                addByte(bytecode, jmpDist & 0xFF);
+                addByte(bytecode, (startPoint >> 24) & 0xFF);
+                addByte(bytecode, (startPoint >> 16) & 0xFF);
+                addByte(bytecode, (startPoint >> 8) & 0xFF);
+                addByte(bytecode, startPoint & 0xFF);
 
                 bytecode->tokenCount += codeBlock->tokenCount;
                 i += codeBlock->tokenCount;
@@ -185,18 +189,19 @@ Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint, FunctionList* fu
                 token = tokenList->list[i];
                 if(token->type == LOOP_START)
                 {
-                    addFunctionData(funcList, funcName, offset + bytecode->length + 6);
+                    addSubroutineData(subList, funcName, offset + bytecode->length + 4);
 
-                    Bytecode* codeBlock = tokenToBytecode(tokenList, i + 1, funcList, offset + bytecode->length);
-                    addByte(codeBlock, 0x0B);
-                    int jmpDist = codeBlock->length + 1;
+                    Bytecode* codeBlock = tokenToBytecode(tokenList, i + 1, subList, offset + bytecode->length + 5);
+
+                    addByte(codeBlock, 0x0C);
+                    int endPoint = bytecode->length + codeBlock->length + offset + 4;
 
                     addByte(bytecode, 0x0E);
-                    addByte(bytecode, (jmpDist >> 24) & 0xFF);
-                    addByte(bytecode, (jmpDist >> 16) & 0xFF);
-                    addByte(bytecode, (jmpDist >> 8) & 0xFF);
-                    addByte(bytecode, jmpDist & 0xFF);
-                    addBytecode(bytecode, codeBlock->code);
+                    addByte(bytecode, (endPoint >> 24) & 0xFF);
+                    addByte(bytecode, (endPoint >> 16) & 0xFF);
+                    addByte(bytecode, (endPoint >> 8) & 0xFF);
+                    addByte(bytecode, endPoint & 0xFF);
+                    addBytecode(bytecode, codeBlock);
 
                     bytecode->tokenCount += codeBlock->tokenCount;
                     i += codeBlock->tokenCount;
@@ -205,7 +210,46 @@ Bytecode* tokenToBytecode(TokenList* tokenList, int startPoint, FunctionList* fu
                 }
                 else
                 {
-                    // TODO: 예외처리
+                    // TODO: 오류 메시지 출력 추가
+                    exit(-1);
+                }
+
+                break;
+            }
+            case CALL:
+            {
+                i++;
+                bytecode->tokenCount++;
+                token = tokenList->list[i];
+                if(token->type == NAME)
+                {
+                    int jmpPoint = 0;
+                    for(int j = 0; j < subList->length; j++)
+                    {
+                        if(strcmp(subList->list[j]->name, token->valueString) == 0)
+                        {
+                            jmpPoint = subList->list[j]->startPoint;
+                            break;
+                        }
+                    }
+
+                    if(jmpPoint == 0)
+                    {
+                        // TODO: 오류 메시지 출력 추가
+                        exit(-1);
+                    }
+
+                    addByte(bytecode, 0x0B);
+                    addByte(bytecode, 0x0E);
+                    addByte(bytecode, (jmpPoint >> 24) & 0xFF);
+                    addByte(bytecode, (jmpPoint >> 16) & 0xFF);
+                    addByte(bytecode, (jmpPoint >> 8) & 0xFF);
+                    addByte(bytecode, jmpPoint & 0xFF);
+                }
+                else
+                {
+                    // TODO: 오류 메시지 출력 추가
+                    exit(-1);
                 }
 
                 break;

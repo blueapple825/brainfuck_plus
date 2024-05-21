@@ -80,8 +80,7 @@ void stepBrainfuckPlus(BrainfuckPlus* bfp)
                     bfp->codePointer++;
                 }
 
-                bfp->codePointer -= 4;
-                bfp->codePointer += jmpDist;
+                bfp->codePointer = jmpDist;
             }
             else
             {
@@ -104,8 +103,7 @@ void stepBrainfuckPlus(BrainfuckPlus* bfp)
                     bfp->codePointer++;
                 }
 
-                bfp->codePointer -= 4;
-                bfp->codePointer += jmpDist;
+                bfp->codePointer = jmpDist;
             }
             else
             {
@@ -116,7 +114,7 @@ void stepBrainfuckPlus(BrainfuckPlus* bfp)
         }
         case 0x0B: // ?, CPUSH
         {
-            bfp->codePointerStack = pushStack(bfp->codePointerStack, bfp->codePointer);
+            bfp->codePointerStack = pushStack(bfp->codePointerStack, bfp->codePointer + 5);
             break;
         }
         case 0x0C: // ?, CPOP
@@ -142,8 +140,7 @@ void stepBrainfuckPlus(BrainfuckPlus* bfp)
                 bfp->codePointer++;
             }
 
-            bfp->codePointer -= 4;
-            bfp->codePointer += jmpDist;
+            bfp->codePointer = jmpDist;
 
             break;
         }
@@ -161,11 +158,11 @@ void freeBrainfuckPlus(BrainfuckPlus* bfp)
 
 void runBrainfuckPlus(const char* code)
 {
-    FunctionList* funcList = createFunctionList();
+    SubroutineList* subList = createSubroutineList();
 
     TokenList* tokenList = tokenize(code);
-    Bytecode* bytecode = tokenToBytecode(tokenList, 0, funcList, 0);
-    freeFunctionList(funcList);
+    Bytecode* bytecode = tokenToBytecode(tokenList, 0, subList, 0);
+    freeSubroutineList(subList);
 
     BrainfuckPlus* bfp = setupBrainfuckPlus(bytecode);
     freeTokenList(tokenList);
