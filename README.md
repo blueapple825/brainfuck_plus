@@ -2,6 +2,26 @@
 
 brainfuck with miscellaneous features added
 
+## build
+
+windows & linux
+
+```
+make
+```
+
+## run
+
+linux
+
+```
+./bfp <file path>
+```
+
+windows
+```
+bfp.exe <file path>
+```
 
 ## command
 
