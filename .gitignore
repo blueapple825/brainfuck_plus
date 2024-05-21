@@ -1,6 +1,9 @@
 *.exe
 *.out
+*.o
+*.bf
+
 bfp
 bfp.exe
-*.o
+
 note/
